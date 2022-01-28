@@ -7,7 +7,6 @@ const Logout = () => {
     const { push } = useHistory();
 
     useEffect(()=> {
-        location.reload();
         axiosWithAuth()
             .post('logout')
             .then(resp=>{
