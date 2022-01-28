@@ -2,11 +2,13 @@ import React from 'react';
 import { Route, Switch } from "react-router-dom";
 import styled from 'styled-components';
 
+
 import Header from './Header';
 import BloomHeader from './BloomHeader';
 import Login from './Login';
 import View from './View'
 import Logout from './Logout'
+import PrivateRoute from './PrivateRoute';
 
 const App = () => {
   return (
@@ -15,18 +17,11 @@ const App = () => {
       <Header/>
       <RouteContainer>
         <Switch>
-            <Route exact path="/">
-              <Login/>
-            </Route>
-            <Route path="/login">
-              <Login/>
-            </Route>
-            <Route path="/view">
-              <View/>
-            </Route>
-            <Route path="/logout">
-              <Logout/>
-            </Route>
+            <PrivateRoute path='/view' component={View}/>
+            <PrivateRoute path='/logout' component={Logout}/>
+            <Route path="/login" component={Login}/>
+            <Route path="/logout" component={Logout}/>
+            <Route exact path="/"component={Login}/>
         </Switch>           
       </RouteContainer>
     </AppContainer>

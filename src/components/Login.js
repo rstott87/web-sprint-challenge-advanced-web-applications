@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { useState } from 'react';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
 const Login = () => {
     const [credentials, setCredentials] = useState({
@@ -11,6 +12,7 @@ const Login = () => {
     // will set state to display error message
     const [errorMessage, setErrorMessage] = useState("") 
 
+    const{ push } = useHistory();
     const handleChange = e => {
         setCredentials({
             ...credentials,
@@ -22,9 +24,8 @@ const Login = () => {
         console.log (`login clicked`);
         axios.post(`http://localhost:5000/api/login`, credentials)
             .then(resp => {
-                console.log(resp);
                 localStorage.setItem("token", resp.data.token);
-                props.history.push('/')
+                push('/view')
             })
             .catch(error => {
                setErrorMessage(error.message)

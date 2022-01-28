@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import axiosWithAuth from '../utils/axiosWithAuth'
+import axios from 'axios';
+import { useEffect } from 'react';
+
 
 import Article from './Article';
 import EditForm from './EditForm';
@@ -9,10 +13,39 @@ const View = (props) => {
     const [editing, setEditing] = useState(false);
     const [editId, setEditId] = useState();
 
+
+useEffect(()=>{
+        axiosWithAuth()
+        .post('articles')
+          .then(res => {
+            setArticles(res.data);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }, []);
+
     const handleDelete = (id) => {
+        axiosWithAuth()
+        .delete(`articles/${id}`)
+        .then(resp=>{
+          setArticles(resp.data);
+          push('view');
+        })
+        .catch(err => {
+            console.log(err);
+        });
     }
 
     const handleEdit = (article) => {
+        axiosWithAuth()
+        .post(`articles`, article)
+            .then(resp => {
+                console.log(resp);
+                setArticles(resp.data);
+                setEditing(false);
+            })
+            .catch(error=>console.log(error))
     }
 
     const handleEditSelect = (id)=> {
@@ -47,7 +80,7 @@ const View = (props) => {
 export default View;
 
 //Task List:
-//1. Build and import axiosWithAuth module in the utils.
+//1. Build and import axiosWithAuth module in the utils.  
 //2. When the component mounts, make an http request that adds all articles to state.
 //3. Complete handleDelete method. It should make a request that delete the article with the included id.
 //4. Complete handleEdit method. It should make a request that updates the article that matches the included article param.
